@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="com.example.bsef17m020_finalproject.SignUp_Form">
+
+    <ImageView
+        android:layout_width="159dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="50dp"
+        app:srcCompat="@drawable/logo"
+        tools:ignore="ContentDescription" />
+
+    <EditText
+        android:id="@+id/edittext_username"
+        android:layout_width="206dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="#f2ffdf"
+        android:drawableStart="@drawable/username"
+        android:drawableLeft="@drawable/username"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:hint="@string/hint_username"
+        android:importantForAutofill="no"
+        tools:ignore="TextFields" />
+    <EditText
+        android:id="@+id/edittext_password"
+        android:layout_width="206dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="#f2ffdf"
+        android:drawableStart="@drawable/password"
+        android:drawableLeft="@drawable/password"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:hint="@string/hint_password"
+         />
+        <EditText
+            android:id="@+id/edittext_cnf_password"
+            android:layout_width="206dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="#f2ffdf"
+            android:drawableStart="@drawable/password"
+            android:drawableLeft="@drawable/password"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:hint="@string/confirm_password" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/female_radio_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female"
+                android:checked="true"/>
+            <RadioButton
+                android:id="@+id/male_radio_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked=""
+                android:text="@string/male" />
+        </RadioGroup>
+    </RelativeLayout>
+    <Button
+        android:id="@+id/button_register"
+        android:layout_width="206dp"
+        android:layout_height="40dp"
+        android:textSize="25sp"
+        android:layout_marginTop="80dp"
+        android:background="#93d9ea"
+        android:textColor="#ff8260"
+        android:text="@string/register"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:textColor="#ffffff"
+            android:text="@string/already_registered?"/>
+
+        <TextView
+            android:id="@+id/textview_login"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textStyle="bold"
+            android:textColor="#04ea00"
+            android:textSize="16sp"
+            android:text="@string/login"/>
+
+    </LinearLayout>
+</LinearLayout>
