@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="44dp"
         android:textColorHint="@color/a"
-        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintBottom_toTopOf="@+id/Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,11 +52,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/Register"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
-        android:text="Login"
+        android:text="Register"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,9 +69,9 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="  Login To Buy "
+        android:text="  Register To Buy "
         android:textColor="@color/btncolor"
-        android:textSize="44sp"
+        android:textSize="38sp"
         android:textStyle="bold"
         app:fontFamily="@font/homemade_apple"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
@@ -80,24 +80,25 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/Register"
+        android:id="@+id/login"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_button"
-        android:text="Register"
+        android:text="Login"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintTop_toBottomOf="@+id/Register"
         app:layout_constraintVertical_bias="0.424" />
+
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Don't have one. Then REGISTER"
+        android:text="Already have one. Then Login"
         android:textColor="@color/wc"
         android:textSize="20sp"
         android:textStyle="italic"
@@ -106,37 +107,21 @@
         app:layout_constraintHorizontal_bias="0.234"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login"
-        app:layout_constraintVertical_bias="0.88" />
-
+        app:layout_constraintVertical_bias="0.405" />
 
     <CheckBox
         android:id="@+id/rememberMeBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:text="Remember Me"
-        android:textSize="20dp"
         android:checked="true"
+        android:text="Remember Me"
         android:textColor="@color/gc"
+        android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        app:layout_constraintVertical_bias="0.47" />
+        app:layout_constraintVertical_bias="0.267" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Forgot password?"
-        android:textColor="@color/wc"
-        android:textSize="20dp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.712"
-        app:layout_constraintStart_toEndOf="@+id/rememberMeBox"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        app:layout_constraintVertical_bias="0.432" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

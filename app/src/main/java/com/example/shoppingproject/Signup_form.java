@@ -1,19 +1,18 @@
 package com.example.shoppingproject;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import io.paperdb.Paper;
 
-public class Login_form extends AppCompatActivity {
+public class Signup_form extends AppCompatActivity {
     DBHelper db;
     EditText userName;
     EditText password;
@@ -25,7 +24,7 @@ public class Login_form extends AppCompatActivity {
         db=new DBHelper(this);
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_form);
+        setContentView(R.layout.signup_form);
         //getActionBar().setTitle(" Login To buy ");
         userName=(EditText)findViewById(R.id.UserName);
         password=(EditText)findViewById(R.id.password);
@@ -35,14 +34,14 @@ public class Login_form extends AppCompatActivity {
         remember=findViewById(R.id.rememberMeBox);
         Paper.init(this);
 
-        signup.setOnClickListener(new View.OnClickListener() {
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registerIntent= new Intent(Login_form.this,Signup_form.class);
-                startActivity(registerIntent);
+                Intent intent= new Intent(Signup_form.this,Login_form.class);
+                startActivity(intent);
             }
         });
-        login.setOnClickListener(new View.OnClickListener() {
+        signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name= userName.getText().toString();
@@ -50,25 +49,20 @@ public class Login_form extends AppCompatActivity {
                 if(name.equals("")||pswd.equals(""))
                     Toast.makeText(getApplicationContext(),"Fields are Empty",Toast.LENGTH_SHORT).show();
                 else{
-                    Boolean validate=db.validateUser(name,pswd);
-                    if(validate==true) {
-                        db.getUserId(name);
+                    Boolean check= db.CheckUserName(name);
+                    if(check==true){
+                    Boolean insert =db.insert(name,pswd);
+                    if(insert==true) {
+                        Toast.makeText(getApplicationContext(), "Let's Shop", Toast.LENGTH_SHORT).show();
                         int id = db.getUserId(name);
-                        allowAccess(name,pswd, id);
+                        allowAccess(name, pswd, id);
                         startActivity(new Intent(getApplicationContext(),Main_Content.class));
                     }
                     else
-                        Toast.makeText(getApplicationContext(),"Incorrect Username or Password",Toast.LENGTH_SHORT).show();
-                    //Boolean check= db.CheckUserName(name);
-                    //if(check==true){
-                        //Boolean insert =db.insert(name,pswd);
-                        //if(insert==true)
-                          //  Toast.makeText(getApplicationContext(),"yaaaaa",Toast.LENGTH_SHORT).show();
-                        //else
-                            //Toast.makeText(getApplicationContext(),"yikes",Toast.LENGTH_SHORT).show();
-                    //}
-                    //else
-                       // Toast.makeText(getApplicationContext(),"nooooooooo",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Some error has occurred. Try Again.",Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                        Toast.makeText(getApplicationContext(),"Please choose another username",Toast.LENGTH_SHORT).show();
                 }
             }
         });
