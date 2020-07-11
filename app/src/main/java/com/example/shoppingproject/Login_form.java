@@ -59,16 +59,6 @@ public class Login_form extends AppCompatActivity {
                     }
                     else
                         Toast.makeText(getApplicationContext(),"Incorrect Username or Password",Toast.LENGTH_SHORT).show();
-                    //Boolean check= db.CheckUserName(name);
-                    //if(check==true){
-                        //Boolean insert =db.insert(name,pswd);
-                        //if(insert==true)
-                          //  Toast.makeText(getApplicationContext(),"yaaaaa",Toast.LENGTH_SHORT).show();
-                        //else
-                            //Toast.makeText(getApplicationContext(),"yikes",Toast.LENGTH_SHORT).show();
-                    //}
-                    //else
-                       // Toast.makeText(getApplicationContext(),"nooooooooo",Toast.LENGTH_SHORT).show();
                 }
             }
         });

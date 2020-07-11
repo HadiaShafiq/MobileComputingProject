@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             validate = db.validateUser(name, password);
         }
         if (validate == true) {
-            Toast.makeText(getApplicationContext(), "Lets' shop", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(), "Lets' shop 1", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), Main_Content.class));
         } else
             Toast.makeText(getApplicationContext(), "Incorrect Username or Password", Toast.LENGTH_SHORT).show();

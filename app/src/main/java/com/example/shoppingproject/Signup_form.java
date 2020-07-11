@@ -19,6 +19,8 @@ public class Signup_form extends AppCompatActivity {
     Button login;
     Button signup;
     CheckBox remember;
+    //Email Validation pattern
+    //public static final String regEx = "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\b";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         db=new DBHelper(this);
@@ -48,21 +50,17 @@ public class Signup_form extends AppCompatActivity {
                 String pswd=password.getText().toString();
                 if(name.equals("")||pswd.equals(""))
                     Toast.makeText(getApplicationContext(),"Fields are Empty",Toast.LENGTH_SHORT).show();
-                else{
-                    Boolean check= db.CheckUserName(name);
-                    if(check==true){
-                    Boolean insert =db.insert(name,pswd);
-                    if(insert==true) {
+                else {
+                    String insert = db.insert(name, pswd);
+                    if (insert == "user inserted") {
                         Toast.makeText(getApplicationContext(), "Let's Shop", Toast.LENGTH_SHORT).show();
                         int id = db.getUserId(name);
                         allowAccess(name, pswd, id);
-                        startActivity(new Intent(getApplicationContext(),Main_Content.class));
-                    }
+                        startActivity(new Intent(getApplicationContext(), Main_Content.class));
+                    } else if (insert == "chose another username")
+                        Toast.makeText(getApplicationContext(), "chose another username", Toast.LENGTH_SHORT).show();
                     else
-                        Toast.makeText(getApplicationContext(),"Some error has occurred. Try Again.",Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                        Toast.makeText(getApplicationContext(),"Please choose another username",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Some error has occurred. Try Again.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

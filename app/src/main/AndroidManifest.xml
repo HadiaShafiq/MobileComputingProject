@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.shoppingproject">
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -12,6 +14,7 @@
         android:theme="@style/AppTheme.Launcher">
         <activity android:name=".Main_Content"></activity>
         <activity android:name=".Login_form" />
+        <activity android:name=".AdminEditCategory" />
         <activity android:name=".Signup_form"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>

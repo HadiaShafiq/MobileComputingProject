@@ -41,61 +41,107 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor = db.rawQuery("Select ID from Category",null);
         int id =cursor.getInt(0);
+        cursor.close();
         return id;
     }
 
-    public boolean insert(String name, String password){
+    public String insert(String name, String password){
         SQLiteDatabase db =this.getWritableDatabase();
-        ContentValues contentValues =  new ContentValues();
-        contentValues.put("UserName",name);
-        contentValues.put("Password",password);
-        long ins = db.insert("users",null,contentValues);
-        if(ins==-1)
-            return false;
-        return true;
+        if(CheckUserName(name)==true) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("UserName", name);
+            contentValues.put("Password", password);
+            long ins = db.insert("users", null, contentValues);
+            if (ins == -1)
+                return "user inserted";
+            return "some error has occurred";
+        }else
+            return "chose another username";
     }
     public boolean validateUser(String name, String password){
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor = db.rawQuery("Select UserName, Password from users where UserName = ? and Password = ?", new String[]{name, password});
-        if(cursor.getCount()>0)
+        int c = cursor.getCount();
+        cursor.close();
+        if(c>0)
             return true;
         return false;
     }
 
-
-
-    public boolean insertCategory(String CategoryName, byte[] imageBytes){
+    public String insertCategory(String CategoryName, byte[] imageBytes){
         SQLiteDatabase db =this.getWritableDatabase();
-        ContentValues contentValues =  new ContentValues();
-        contentValues.put("CategoryName",CategoryName);
-        contentValues.put("CategoryImage",imageBytes);
-        long ins = db.insert("Category",null,contentValues);
-        if(ins==-1)
-            return false;
-        return true;
+        if(CheckCategoryName(CategoryName)==true) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("CategoryName", CategoryName);
+            contentValues.put("CategoryImage", imageBytes);
+            long ins = db.insert("Category", null, contentValues);
+            if (ins == -1)
+                return "inserted";
+            return "error has occurred";
+        }else
+            return "this category already exists";
     }
     public List<Category> getCategories(){
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select * from Category",null);
+        String name ="Clothes";
+        Cursor cursor = db.rawQuery("Select * from Category ",null);//where CategoryName = ?",new String[]{name});
         List<Category> categoryList = new ArrayList<Category>();
-        Category category =new Category();
+        Category category ;
         if(cursor.moveToFirst()){
-            do{
+            while (!cursor.isAfterLast()) {
+                category =new Category(); //by adding this last item was not dispalyed the total number of item times
+                category.setcategoryName(cursor.getString(cursor.getColumnIndex("CategoryName")));
+                category.setcategoryImg(cursor.getBlob(cursor.getColumnIndex("CategoryImage")));
                 category.setCategoryId(cursor.getInt(0));
-                category.setcategoryName(cursor.getString(1));
-                category.setcategoryImg(cursor.getBlob(2));
+                cursor.moveToNext();
                 categoryList.add(category);
-            }while (cursor.moveToNext());
+            }
+            //do{
+              //  category.setCategoryId(cursor.getInt(0));
+                //category.setcategoryName(cursor.getString(1));
+               // category.setcategoryImg(cursor.getBlob(2));
+               // categoryList.add(category);
+            //}while (cursor.moveToNext());
         }
+        cursor.close();
         return categoryList;
     }
 
     public boolean CheckUserName(String name){
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor = db.rawQuery("Select UserName from users where UserName = ?", new String[]{name});
-        if(cursor.getCount()>0)
+        int c = cursor.getCount();
+        cursor.close();
+        if(c>0)
             return false;
         return true;
     }
-}
 
+    public boolean CheckCategoryName(String name){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select CategoryName from Category where CategoryName = ?", new String[]{name});
+        int c =cursor.getCount();
+        cursor.close();
+        if(c >0)
+            return false;
+        return true;
+    }
+    public int getCategoryCount(){
+        SQLiteDatabase db=this.getReadableDatabase();
+        String name="user";
+        Cursor cursor = db.rawQuery("Select * from users ",null);//where UserName = ?", new String[]{name});
+        int a= 1982;
+        if(cursor.moveToFirst()) {
+           // c =cursor.getString(cursor.getColumnIndex("Password"));
+            a=cursor.getCount();
+        }
+        return a;
+    }
+
+    public int deleteCategory(String name){
+        SQLiteDatabase db=this.getReadableDatabase();
+        String whereClause ="CategoryName = ?";
+        String[] arguments ={name};
+        return db.delete("Category", "CategoryName" + "='" + name +"' ;", null) ;
+    }
+}
