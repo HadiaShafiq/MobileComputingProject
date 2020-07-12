@@ -3,7 +3,7 @@
     package="com.example.shoppingproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,10 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
-        <activity android:name=".Main_Content"></activity>
+        <activity android:name=".AdminHandleProducts"></activity>
+        <activity android:name=".Admin_HandleData" />
+        <activity android:name=".Main_Content" />
         <activity android:name=".Login_form" />
         <activity android:name=".AdminEditCategory" />
-        <activity android:name=".Signup_form"></activity>
+        <activity android:name=".Signup_form" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -39,9 +39,11 @@ public class Main_Content extends AppCompatActivity {
     //on logou button do Paper.book().destroy();
     Toolbar myToolbar;
     DBHelper db;
-    Button handleCetgories;
+    Button handleData;
     CategoryAdapter adapter;
     List<Category> data = new ArrayList<Category>();
+    List<Product> productData = new ArrayList<Product>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -52,34 +54,44 @@ public class Main_Content extends AppCompatActivity {
         myToolbar.inflateMenu(R.menu.my_menu);
         //myToolbar.setLogo(R.drawable.app_logo);
 
-        db=new DBHelper(this);
+        db = new DBHelper(this);
         data = db.getCategories();
+        productData = db.getProduct();
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.categorylist);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
-        recyclerView.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
+        RecyclerView recyclerViewCategory = (RecyclerView) findViewById(R.id.categorylist);
+        LinearLayoutManager linearLayoutManagerCategory = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManagerCategory.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+        recyclerViewCategory.setLayoutManager(linearLayoutManagerCategory); // set LayoutManager to RecyclerView
         CategoryAdapter customAdapter = new CategoryAdapter(Main_Content.this, data);
-        recyclerView.setAdapter(customAdapter);
+        recyclerViewCategory.setAdapter(customAdapter);
+
+        RecyclerView recyclerViewProduct = (RecyclerView) findViewById(R.id.productlist);
+        LinearLayoutManager linearLayoutManagerProduct = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManagerProduct.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+        recyclerViewProduct.setLayoutManager(linearLayoutManagerProduct); // set LayoutManager to RecyclerView
+        ProductAdapter customProductAdapter = new ProductAdapter(Main_Content.this, productData);
+        recyclerViewProduct.setAdapter(customProductAdapter);
+
 
         Paper.init(this);
         String name = Paper.book().read(Users.userName);
-        handleCetgories = findViewById(R.id.editCategory);
-        if(name.equals("user")){
-            handleCetgories.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(), name ,Toast.LENGTH_SHORT).show();
-        }else{
-            handleCetgories.setVisibility(View.GONE);
-        Toast.makeText(getApplicationContext(), "in"+name+"else" ,Toast.LENGTH_LONG).show();}
-
-        handleCetgories.setOnClickListener(new View.OnClickListener() {
+        handleData = findViewById(R.id.handle);
+        if (name.equals("user")) {
+            handleData.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
+        } else {
+            handleData.setVisibility(View.GONE);
+        }
+        handleData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Main_Content.this, AdminEditCategory.class);
-                startActivity(intent);
+                Intent registerIntent = new Intent(Main_Content.this, Admin_HandleData.class);
+                startActivity(registerIntent);
             }
         });
+        Toast.makeText(getApplicationContext(), "in" + name + "else", Toast.LENGTH_LONG).show();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -91,9 +103,5 @@ public class Main_Content extends AppCompatActivity {
       //  Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         //imageView.setImageBitmap(bitmap);
     //}
-    public void getCategory(){
-
-    }
-
 }
 

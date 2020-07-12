@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Main_Content">
@@ -13,8 +13,8 @@
         <include
             android:id="@+id/include"
             layout="@layout/my_toolbar"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="-8dp" />
+            tools:layout_editor_absoluteX="55dp"
+            tools:layout_editor_absoluteY="0dp" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -69,12 +69,12 @@
             app:layout_constraintTop_toBottomOf="@+id/slogan" />
 
         <Button
-            android:id="@+id/editCategory"
+            android:id="@+id/handle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="11dp"
             android:layout_marginLeft="11dp"
-            android:text="edit"
+            android:text="handle"
             app:layout_constraintEnd_toStartOf="@+id/button"
             app:layout_constraintHorizontal_bias="0.688"
             app:layout_constraintStart_toEndOf="@+id/category"
@@ -83,7 +83,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintBottom_toTopOf="@+id/trendingItems"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.536"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,13 +94,12 @@
                 android:id="@+id/categorylist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
                 android:layout_marginBottom="50dp"/>
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/trendingItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="272dp"
@@ -113,6 +112,21 @@
             app:layout_constraintHorizontal_bias="0.274"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/category" />
+
+        <LinearLayout
+            android:layout_width="74dp"
+            android:layout_height="57dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trendingItems">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productlist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
