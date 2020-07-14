@@ -300,11 +300,11 @@ public class DBHelper extends SQLiteOpenHelper {
             product.setproductsold(cursor.getInt(cursor.getColumnIndex("sold")));
             product.setproductinStock(cursor.getInt(cursor.getColumnIndex("inStock")));
         }
-            return product;
+        return product;
     }
     public int getProductId(String name){
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select ProductID from Product where ProductName",new String[]{name});
+        Cursor cursor = db.rawQuery("Select ProductID from Product where ProductName = ?",new String[]{name});
         if (cursor.moveToFirst()) {
             int id =cursor.getInt(cursor.getColumnIndex("ProductID"));
             cursor.close();
@@ -316,7 +316,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor = db.rawQuery("Select ProductImage from Product where ProductID =? ",new String[]{String.valueOf(pid)});
         if (cursor.moveToFirst()) {
-        byte [] imageBytes =cursor.getBlob(cursor.getColumnIndex("ProductImage"));
+            byte [] imageBytes =cursor.getBlob(cursor.getColumnIndex("ProductImage"));
             cursor.close();
             return imageBytes;
         }
@@ -339,8 +339,8 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db =this.getWritableDatabase();
         int pid=getProductId(productName);
         ContentValues contentValues = new ContentValues();
-        contentValues.put("ProductID", pid);
         contentValues.put("UserID", uid);
+        contentValues.put("ProductID", pid);
         contentValues.put("TotalPrice", price);
         contentValues.put("quantity", qty);
         long ins = db.insert("Cart", null, contentValues);
