@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Main_Content">
-
 
         <include
             android:id="@+id/include"
@@ -102,28 +102,29 @@
             android:id="@+id/trendingItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="272dp"
+            android:layout_marginTop="252dp"
             android:fontFamily="@font/homemade_apple"
             android:text="Trending Items"
             android:textColor="@color/a"
             android:textSize="30dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.274"
+            app:layout_constraintHorizontal_bias="0.353"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/category" />
 
         <LinearLayout
-            android:layout_width="74dp"
-            android:layout_height="57dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trendingItems">
 
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/productlist"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

@@ -12,7 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Launcher">
-        <activity android:name=".AdminHandleProducts"></activity>
+        <activity android:name=".ProductsInCart"></activity>
+        <activity android:name=".CartActivity" />
+        <activity android:name=".ProductDetails" />
+        <activity android:name=".CategoryDetails" />
+        <activity android:name=".AdminHandleProducts" />
         <activity android:name=".Admin_HandleData" />
         <activity android:name=".Main_Content" />
         <activity android:name=".Login_form" />

@@ -16,7 +16,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
     Context context;
     public DBHelper(Context context){
-        super(context,"mydatabase",null,2);
+        super(context,"mydatabase",null,3);
         this.context=context;
     }
     @Override
@@ -24,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("Create table users(ID integer primary key autoincrement, UserName text, Password text )");
         db.execSQL("Create table Category(CategoryID integer primary key autoincrement, CategoryName text, CategoryImage BLOB )");
         db.execSQL("Create table Product(ProductID integer primary key autoincrement, ProductName text, ProductImage BLOB, price integer, quantity integer, sold integer, inStock integer, onOrder integer, description text, onSale integer DEFAULT 0, discount integer, CategoryID integer ,FOREIGN KEY(CategoryID)  references Category(CategoryID) On delete cascade )");
-        db.execSQL("Create table Cart(CartID integer primary key autoincrement,  TotalPrice integer, ProductID integer , UserID integer, FOREIGN KEY(UserID)  references users  On delete cascade , FOREIGN KEY(ProductID) references Product(ID) On delete cascade )");
+        db.execSQL("Create table Cart(CartID integer primary key autoincrement, quantity integer  ,TotalPrice integer, ProductID integer , UserID integer, FOREIGN KEY(UserID)  references users  On delete cascade , FOREIGN KEY(ProductID) references Product(ID) On delete cascade )");
         db.execSQL("Create table Orders(OrderID integer primary key autoincrement, TotalPrice integer,  quantity integer, UserID integer, ProductID integer ,FOREIGN KEY(UserID)  references users(ID) On delete cascade,  FOREIGN KEY(ProductID)  references users(ProductID) On delete cascade )");
     }
     @Override
@@ -52,10 +52,13 @@ public class DBHelper extends SQLiteOpenHelper {
     //for user table
     public int getUserId(String name){
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select ID from users",null);
-        int id =cursor.getInt(0);
-        cursor.close();
-        return id;
+        Cursor cursor = db.rawQuery("Select * from users",null);
+        if (cursor.moveToFirst()) {
+            int id =cursor.getInt(cursor.getColumnIndex("ID"));
+            cursor.close();
+            return id;
+        }
+        return 0;
     }
     public String insert(String name, String password){
         SQLiteDatabase db =this.getWritableDatabase();
@@ -64,7 +67,7 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put("UserName", name);
             contentValues.put("Password", password);
             long ins = db.insert("users", null, contentValues);
-            if (ins == -1)
+            if (ins != -1)
                 return "user inserted";
             return "some error has occurred";
         }else
@@ -97,13 +100,13 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put("CategoryName", CategoryName);
             contentValues.put("CategoryImage", imageBytes);
             long ins = db.insert("Category", null, contentValues);
-            if (ins == -1)
+            if (ins != -1)
                 return "inserted";
             return "error has occurred";
         }else
             return "this category already exists";
     }
-    public List<Category> getCategories(){
+    public List<Category> getAllCategories(){
         SQLiteDatabase db=this.getReadableDatabase();
         String name ="Clothes";
         Cursor cursor = db.rawQuery("Select * from Category ",null);//where CategoryName = ?",new String[]{name});
@@ -156,17 +159,27 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public int getCategoryId(String name){
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select CategoryID from Category where CategoryName = ?", new String[]{name});
-        int id =cursor.getInt(0);
-        cursor.close();
-        return id;
+        Cursor cursor = db.rawQuery("Select * from Category where CategoryName = ?", new String[]{name});
+        if (cursor.moveToFirst()) {
+            int id =cursor.getInt(cursor.getColumnIndex("CategoryID"));
+            cursor.close();
+            return id;
+        }
+        return 0;
+    }
+    public boolean ifCategoryExist(String name){
+        int id = getCategoryId(name);
+        if(id==0) {
+            return false;
+        }
+        return true;
     }
 
     // for product table
-    public String insertProduct(String ProductName, byte[] imageBytes, int price, int quantity, int discount, int sale ,String desc , String categoryName ){
+    public String insertProduct(String ProductName, byte[] imageBytes, int price, int quantity, int discount, int sale ,String categoryName , String desc  ){
         SQLiteDatabase db =this.getWritableDatabase();
         int id = getCategoryId(categoryName);
-        if(id==-1) {
+        if(id==0) {
             return "this category does not exist";
         }
         else {
@@ -184,14 +197,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 contentValues.put("discount", discount);
                 contentValues.put("CategoryID", id);
                 long ins = db.insert("Product", null, contentValues);
-                if (ins == -1)
+                if (ins != -1)
                     return "inserted";
                 return "error has occurred";
             } else
                 return "this Product already exists";
         }
     }
-    public List<Product> getProduct(){
+    public List<Product> getAllProducts(){
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor = db.rawQuery("Select * from Product ",null);
         List<Product> productList = new ArrayList<Product>();
@@ -243,5 +256,118 @@ public class DBHelper extends SQLiteOpenHelper {
         String[] arguments ={name};
         return db.delete("Product", "ProductName" + "='" + name +"' ;", null) ;
     }
+    public List<Product> getCategoryRelatedProduct(String categoryName){
+        int id = getCategoryId(categoryName);
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from Product where CategoryID = ?",new String[] {String.valueOf(id)});
+        List<Product> productList = new ArrayList<Product>();
+        Product product ;
+        if(cursor.moveToFirst()){
+            while (!cursor.isAfterLast()) {
+                product =new Product(); //by adding this last item was not dispalyed the total number of item times
+                product.setproductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+                product.setproductImg(cursor.getBlob(cursor.getColumnIndex("ProductImage")));
+                product.setproductId(cursor.getInt(0));
+                product.setproductdescription(cursor.getString(cursor.getColumnIndex("description")));
+                product.setproductcategoryName(cursor.getString(cursor.getColumnIndex("description")));
+                product.setproductdiscount(cursor.getInt(cursor.getColumnIndex("discount")));
+                product.setproductsale(cursor.getInt(cursor.getColumnIndex("onSale")));
+                product.setproductquantity(cursor.getInt(cursor.getColumnIndex("quantity")));
+                product.setproductprice(cursor.getInt(cursor.getColumnIndex("price")));
+                product.setproductsold(cursor.getInt(cursor.getColumnIndex("sold")));
+                product.setproductinStock(cursor.getInt(cursor.getColumnIndex("inStock")));
+                cursor.moveToNext();
+                productList.add(product);
+            }
+        }
+        cursor.close();
+        return productList;
+    }
+    public Product getProduct(String productName){
+        Product product=new Product();
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from Product where ProductName = ?",new String[] {productName});
+        if(cursor.moveToFirst()) {
+            product.setproductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+            product.setproductImg(cursor.getBlob(cursor.getColumnIndex("ProductImage")));
+            product.setproductId(cursor.getInt(0));
+            product.setproductdescription(cursor.getString(cursor.getColumnIndex("description")));
+            product.setproductcategoryName(cursor.getString(cursor.getColumnIndex("description")));
+            product.setproductdiscount(cursor.getInt(cursor.getColumnIndex("discount")));
+            product.setproductsale(cursor.getInt(cursor.getColumnIndex("onSale")));
+            product.setproductquantity(cursor.getInt(cursor.getColumnIndex("quantity")));
+            product.setproductprice(cursor.getInt(cursor.getColumnIndex("price")));
+            product.setproductsold(cursor.getInt(cursor.getColumnIndex("sold")));
+            product.setproductinStock(cursor.getInt(cursor.getColumnIndex("inStock")));
+        }
+            return product;
+    }
+    public int getProductId(String name){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select ProductID from Product where ProductName",new String[]{name});
+        if (cursor.moveToFirst()) {
+            int id =cursor.getInt(cursor.getColumnIndex("ProductID"));
+            cursor.close();
+            return id;
+        }
+        return 0;
+    }
+    public byte[] getImage(int pid){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select ProductImage from Product where ProductID =? ",new String[]{String.valueOf(pid)});
+        if (cursor.moveToFirst()) {
+        byte [] imageBytes =cursor.getBlob(cursor.getColumnIndex("ProductImage"));
+            cursor.close();
+            return imageBytes;
+        }
+        return null;
+    }
+    public String getProductName(int pid){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select ProductID from Product where ProductID",new String[]{String.valueOf(pid)});
+        if (cursor.moveToFirst()) {
+            String name  =cursor.getString(cursor.getColumnIndex("ProductName"));
+            cursor.close();
+            return name;
+        }
+        return "";
+    }
 
+
+    //for cart table
+    public String addToCart(String productName, int uid, int qty, int price){
+        SQLiteDatabase db =this.getWritableDatabase();
+        int pid=getProductId(productName);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("ProductID", pid);
+        contentValues.put("UserID", uid);
+        contentValues.put("TotalPrice", price);
+        contentValues.put("quantity", qty);
+        long ins = db.insert("Cart", null, contentValues);
+        if (ins != -1)
+            return "inserted";
+        return "error has occurred";
+    }
+
+    public List<CartProducts> getCart(int uid){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from Cart where UserID = ?",new String[] {String.valueOf(uid)});
+        List<CartProducts> cartProductList = new ArrayList<CartProducts>();
+        CartProducts CartProduct ;
+        if(cursor.moveToFirst()){
+            while (!cursor.isAfterLast()) {
+                CartProduct =new CartProducts(); //by adding this last item was not dispalyed the total number of item times
+                CartProduct.setproductID(cursor.getInt(cursor.getColumnIndex("ProductID")));
+                CartProduct.setPrice(cursor.getInt(cursor.getColumnIndex("TotalPrice")));
+                CartProduct.setqty(cursor.getInt(cursor.getColumnIndex("quantity")));
+                CartProduct.setuserId(cursor.getInt(cursor.getColumnIndex("UserID")));
+                CartProduct.setproductImg(getImage(CartProduct.getproductID()));
+                CartProduct.setproductName(getProductName(CartProduct.getproductID()));
+                cursor.moveToNext();
+                cartProductList.add(CartProduct);
+            }
+        }
+        cursor.close();
+        return cartProductList;
+    }
 }

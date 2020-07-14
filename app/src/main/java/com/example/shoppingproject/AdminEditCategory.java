@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.ByteArrayOutputStream;
 
 public class AdminEditCategory  extends AppCompatActivity {
+
     Button addCetgories;
     Button delCetgories;
     Button editCetgories;
@@ -84,7 +85,6 @@ public class AdminEditCategory  extends AppCompatActivity {
                 else {
                     String msg = insertCategory(name);
                     Toast.makeText(getApplicationContext(),msg ,Toast.LENGTH_SHORT).show();
-
                 }
             }
         });

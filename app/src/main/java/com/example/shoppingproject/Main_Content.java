@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -33,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.paperdb.Paper;
+import okio.Options;
 
 
 public class Main_Content extends AppCompatActivity {
@@ -40,7 +42,6 @@ public class Main_Content extends AppCompatActivity {
     Toolbar myToolbar;
     DBHelper db;
     Button handleData;
-    CategoryAdapter adapter;
     List<Category> data = new ArrayList<Category>();
     List<Product> productData = new ArrayList<Product>();
 
@@ -55,8 +56,8 @@ public class Main_Content extends AppCompatActivity {
         //myToolbar.setLogo(R.drawable.app_logo);
 
         db = new DBHelper(this);
-        data = db.getCategories();
-        productData = db.getProduct();
+        data = db.getAllCategories();
+        productData = db.getAllProducts();
 
         RecyclerView recyclerViewCategory = (RecyclerView) findViewById(R.id.categorylist);
         LinearLayoutManager linearLayoutManagerCategory = new LinearLayoutManager(getApplicationContext());
@@ -71,7 +72,6 @@ public class Main_Content extends AppCompatActivity {
         recyclerViewProduct.setLayoutManager(linearLayoutManagerProduct); // set LayoutManager to RecyclerView
         ProductAdapter customProductAdapter = new ProductAdapter(Main_Content.this, productData);
         recyclerViewProduct.setAdapter(customProductAdapter);
-
 
         Paper.init(this);
         String name = Paper.book().read(Users.userName);
@@ -89,7 +89,6 @@ public class Main_Content extends AppCompatActivity {
                 startActivity(registerIntent);
             }
         });
-        Toast.makeText(getApplicationContext(), "in" + name + "else", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -98,6 +97,17 @@ public class Main_Content extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.my_menu, menu);
         return true;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId()==R.id.cart){
+            String name = Paper.book().read(Users.userName);
+            Intent cartIntent = new Intent(Main_Content.this, CartActivity.class);
+            cartIntent.putExtra("userName",name);
+            startActivity(cartIntent);
+        }
+        return true;
+    }
+
 
     //private void setUpImage(byte[] bytes) {
       //  Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
