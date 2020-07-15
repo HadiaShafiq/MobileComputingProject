@@ -16,21 +16,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/main/java/com/example/shoppingproject/DBHelper.java" description="contentValues.put(&quot;price&quot;, price);" line="189" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f4c599b-b227-438a-8ab5-f2d7ec451a7c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/CartActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/CartActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/CartAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/CartAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/CartProducts.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/CartProducts.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/CategoryDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/CategoryDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/DBHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/DBHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/Main_Content.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/Main_Content.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/ProductDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/shoppingproject/ProductDetails.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_cart.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_cart.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/res/layout/cart_products.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/cart_products.xml" afterDir="false" />
-    </list>
+    <list default="true" id="0f4c599b-b227-438a-8ab5-f2d7ec451a7c" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -307,7 +293,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Structure" order="0" side_tool="true" />
       <window_info id="Image Layers" order="1" />
