@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -46,7 +47,7 @@ public class ProductDetails extends AppCompatActivity {
         productData =db.getProduct(name);
 
         productImgIV =(ImageView)findViewById(R.id.productImg);
-        //convert byte to bitmap take from Category class
+        //convert byte to bitmap
         byte[] outImage=productData.getproductImg();
         ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
         Bitmap theImage = BitmapFactory.decodeStream(imageStream);
@@ -100,6 +101,8 @@ public class ProductDetails extends AppCompatActivity {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int price = productData.getproductprice()*counter;
+                db.addOrder(name,uid,counter,price);
                 Toast.makeText(getApplicationContext(), "your order is on the way", Toast.LENGTH_LONG).show();
             }
         });
@@ -110,5 +113,20 @@ public class ProductDetails extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.my_menu, menu);
         return true;
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId()==R.id.cart){
+            String name = Paper.book().read(Users.userName);
+            Intent cartIntent = new Intent(ProductDetails.this, CartActivity.class);
+            cartIntent.putExtra("userName",name);
+            startActivity(cartIntent);
+        }
+        if(item.getItemId()==R.id.action_settings) {
+            String name = Paper.book().read(Users.userName);
+            Intent intent = new Intent(ProductDetails.this, Settings.class);
+            intent.putExtra("userName",name);
+            startActivity(intent);
+        }
+        return true;
+    }
 }

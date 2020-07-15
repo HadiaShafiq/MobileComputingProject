@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.paperdb.Paper;
 
 public class CategoryDetails extends AppCompatActivity {
 
@@ -53,6 +56,22 @@ public class CategoryDetails extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.my_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId()==R.id.cart){
+            String name = Paper.book().read(Users.userName);
+            Intent cartIntent = new Intent(CategoryDetails.this, CartActivity.class);
+            cartIntent.putExtra("userName",name);
+            startActivity(cartIntent);
+        }
+        if(item.getItemId()==R.id.action_settings) {
+            String name = Paper.book().read(Users.userName);
+            Intent intent = new Intent(CategoryDetails.this, Settings.class);
+            intent.putExtra("userName",name);
+            startActivity(intent);
+        }
         return true;
     }
 }

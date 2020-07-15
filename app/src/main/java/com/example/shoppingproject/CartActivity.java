@@ -39,10 +39,9 @@ public class CartActivity extends AppCompatActivity {
         }
         else{
             empty.setVisibility(View.GONE);
-            cartProductData =db.getCart(uid);
             RecyclerView recyclerViewProduct = (RecyclerView) findViewById(R.id.Cartproductlist);
             LinearLayoutManager linearLayoutManagerProduct = new LinearLayoutManager(getApplicationContext());
-            linearLayoutManagerProduct.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+            //linearLayoutManagerProduct.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
             recyclerViewProduct.setLayoutManager(linearLayoutManagerProduct); // set LayoutManager to RecyclerView
             CartAdapter customCartAdapter = new CartAdapter(CartActivity.this, cartProductData);
             recyclerViewProduct.setAdapter(customCartAdapter);

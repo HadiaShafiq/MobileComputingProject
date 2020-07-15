@@ -76,7 +76,7 @@ public class Main_Content extends AppCompatActivity {
         Paper.init(this);
         String name = Paper.book().read(Users.userName);
         handleData = findViewById(R.id.handle);
-        if (name.equals("user")) {
+        if (name.equals("admin")) {
             handleData.setVisibility(View.VISIBLE);
             Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
         } else {
@@ -104,6 +104,12 @@ public class Main_Content extends AppCompatActivity {
             Intent cartIntent = new Intent(Main_Content.this, CartActivity.class);
             cartIntent.putExtra("userName",name);
             startActivity(cartIntent);
+        }
+        if(item.getItemId()==R.id.action_settings) {
+            String name = Paper.book().read(Users.userName);
+            Intent intent = new Intent(Main_Content.this, Settings.class);
+            intent.putExtra("userName",name);
+            startActivity(intent);
         }
         return true;
     }

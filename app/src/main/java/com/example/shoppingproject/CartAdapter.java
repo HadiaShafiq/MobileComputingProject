@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class CartAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private List<CartProducts> data = new ArrayList<CartProducts>();
     private LayoutInflater inflater;
     Context context;
+    DBHelper db;
+
 
     public CartAdapter(Context context, List<CartProducts> data){
         this.context=context;
@@ -41,8 +45,9 @@ public class CartAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         final CartAdapter.CartHolder myHolder= (CartAdapter.CartHolder) holder;
         final CartProducts cartproduct=data.get(position);
         myHolder.txtTitle.setText(cartproduct.getproductName());
-        myHolder.price.setText(cartproduct.getPrice());
-        myHolder.quantity.setText(cartproduct.getqty());
+        myHolder.price.setText(""+cartproduct.getPrice());
+        myHolder.quantity.setText(""+cartproduct.getqty());
+        myHolder.cartID.setText(""+cartproduct.getCartId());
         //convert byte to bitmap
         byte[] outImage=cartproduct.getproductImg();
         ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
@@ -61,6 +66,8 @@ public class CartAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView  price;
         TextView quantity;
         ImageView imgIcon;
+        TextView cartID;
+        Button remove;
         public CartHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
@@ -68,14 +75,20 @@ public class CartAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             imgIcon= (ImageView) itemView.findViewById(R.id.proImg);
             price= (TextView) itemView.findViewById(R.id.price);
             quantity= (TextView) itemView.findViewById(R.id.qty);
-            imgIcon.setOnClickListener(this);
+            cartID= (TextView) itemView.findViewById(R.id.cartID);
+            remove = itemView.findViewById(R.id.remove);
+            remove.setOnClickListener(this);
         }
-
         @Override
         public void onClick(View v) {
-            Intent productIntent = new Intent(context, ProductDetails.class);
-            productIntent.putExtra("ProductName",txtTitle.getText().toString());
-            context.startActivity(productIntent);
+            db = new DBHelper(context);
+            int id = Integer.parseInt(cartID.getText().toString());
+            db.removeCartitem(id);
+            data.remove(getAdapterPosition());
+            notifyItemRemoved(getAdapterPosition());
+            notifyItemRangeChanged(getAdapterPosition(),data.size());
+            //CartAdapter adapter= new CartAdapter(context,data);
+            //adapter.notifyDataSetChanged();
         }
     }
 }

@@ -24,8 +24,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("Create table users(ID integer primary key autoincrement, UserName text, Password text )");
         db.execSQL("Create table Category(CategoryID integer primary key autoincrement, CategoryName text, CategoryImage BLOB )");
         db.execSQL("Create table Product(ProductID integer primary key autoincrement, ProductName text, ProductImage BLOB, price integer, quantity integer, sold integer, inStock integer, onOrder integer, description text, onSale integer DEFAULT 0, discount integer, CategoryID integer ,FOREIGN KEY(CategoryID)  references Category(CategoryID) On delete cascade )");
-        db.execSQL("Create table Cart(CartID integer primary key autoincrement, quantity integer  ,TotalPrice integer, ProductID integer , UserID integer, FOREIGN KEY(UserID)  references users  On delete cascade , FOREIGN KEY(ProductID) references Product(ID) On delete cascade )");
-        db.execSQL("Create table Orders(OrderID integer primary key autoincrement, TotalPrice integer,  quantity integer, UserID integer, ProductID integer ,FOREIGN KEY(UserID)  references users(ID) On delete cascade,  FOREIGN KEY(ProductID)  references users(ProductID) On delete cascade )");
+        db.execSQL("Create table Cart(CartID integer primary key autoincrement, quantity integer  ,TotalPrice integer, ProductID integer , UserID integer, FOREIGN KEY(UserID)  references users  On delete cascade , FOREIGN KEY(ProductID) references Product(ProductID) On delete cascade )");
+        db.execSQL("Create table Orders(OrderID integer primary key autoincrement, TotalPrice integer,  quantity integer, UserID integer, ProductID integer ,FOREIGN KEY(UserID)  references users(ID) On delete cascade,  FOREIGN KEY(ProductID)  references Product(ProductID) On delete cascade )");
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -52,7 +52,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //for user table
     public int getUserId(String name){
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select * from users",null);
+        Cursor cursor = db.rawQuery("Select * from users where UserName = ?", new String[]{name});
         if (cursor.moveToFirst()) {
             int id =cursor.getInt(cursor.getColumnIndex("ID"));
             cursor.close();
@@ -303,14 +303,14 @@ public class DBHelper extends SQLiteOpenHelper {
         return product;
     }
     public int getProductId(String name){
+        int id;
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select ProductID from Product where ProductName = ?",new String[]{name});
+        Cursor cursor = db.rawQuery("Select * from Product where ProductName =? ", new String[]{name});
         if (cursor.moveToFirst()) {
-            int id =cursor.getInt(cursor.getColumnIndex("ProductID"));
-            cursor.close();
+            id =cursor.getInt(cursor.getColumnIndex("ProductID"));
             return id;
         }
-        return 0;
+       return 0;
     }
     public byte[] getImage(int pid){
         SQLiteDatabase db=this.getReadableDatabase();
@@ -324,7 +324,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public String getProductName(int pid){
         SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select ProductID from Product where ProductID",new String[]{String.valueOf(pid)});
+        Cursor cursor = db.rawQuery("Select * from Product where ProductID = ?",new String[]{String.valueOf(pid)});
         if (cursor.moveToFirst()) {
             String name  =cursor.getString(cursor.getColumnIndex("ProductName"));
             cursor.close();
@@ -333,6 +333,28 @@ public class DBHelper extends SQLiteOpenHelper {
         return "";
     }
 
+    public List<String> getAllProductNames(){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select ProductName from Product",null);
+        List<String>result= new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do{
+                result.add(cursor.getString(cursor.getColumnIndex("ProductName")));
+            }while (cursor.moveToNext());
+        }
+        return result;
+    }
+    public List<String> getProductsByName(String name){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select ProductName from Product where ProductName LIKE ?", new String[]{name+"%"});
+        List<String>result= new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do{
+                result.add(cursor.getString(cursor.getColumnIndex("ProductName")));
+            }while (cursor.moveToNext());
+        }
+        return result;
+    }
 
     //for cart table
     public String addToCart(String productName, int uid, int qty, int price){
@@ -340,19 +362,19 @@ public class DBHelper extends SQLiteOpenHelper {
         int pid=getProductId(productName);
         ContentValues contentValues = new ContentValues();
         contentValues.put("UserID", uid);
+        contentValues.put("quantity", qty);
         contentValues.put("ProductID", pid);
         contentValues.put("TotalPrice", price);
-        contentValues.put("quantity", qty);
         long ins = db.insert("Cart", null, contentValues);
         if (ins != -1)
             return "inserted";
         return "error has occurred";
     }
-
     public List<CartProducts> getCart(int uid){
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor = db.rawQuery("Select * from Cart where UserID = ?",new String[] {String.valueOf(uid)});
         List<CartProducts> cartProductList = new ArrayList<CartProducts>();
+        String pname;
         CartProducts CartProduct ;
         if(cursor.moveToFirst()){
             while (!cursor.isAfterLast()) {
@@ -362,7 +384,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 CartProduct.setqty(cursor.getInt(cursor.getColumnIndex("quantity")));
                 CartProduct.setuserId(cursor.getInt(cursor.getColumnIndex("UserID")));
                 CartProduct.setproductImg(getImage(CartProduct.getproductID()));
-                CartProduct.setproductName(getProductName(CartProduct.getproductID()));
+                CartProduct.setCartId(cursor.getInt(cursor.getColumnIndex("CartID")));
+                int pid = CartProduct.getproductID();
+                CartProduct.setproductName(getProductName(pid));
                 cursor.moveToNext();
                 cartProductList.add(CartProduct);
             }
@@ -370,4 +394,50 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return cartProductList;
     }
+    public void removeCartitem(int cartID){
+        SQLiteDatabase db=this.getReadableDatabase();
+        String whereClause ="CategoryName = ?";
+        int[] arguments ={cartID};
+        db.delete("Cart", "CartID" + "='" + cartID +"' ;", null) ;
+    }
+
+    //for order table
+    public String addOrder(String productName, int uid, int qty, int price){
+        SQLiteDatabase db =this.getWritableDatabase();
+        int pid=getProductId(productName);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("UserID", uid);
+        contentValues.put("quantity", qty);
+        contentValues.put("ProductID", pid);
+        contentValues.put("TotalPrice", price);
+        long ins = db.insert("Orders", null, contentValues);
+        if (ins != -1)
+            return "inserted";
+        return "error has occurred";
+    }
+    public List<OrderedProducts> getOrders(int uid){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from Orders where UserID = ?",new String[] {String.valueOf(uid)});
+        List<OrderedProducts> orderedProductList = new ArrayList<OrderedProducts>();
+        String pname;
+        OrderedProducts orderedProducts ;
+        if(cursor.moveToFirst()){
+            while (!cursor.isAfterLast()) {
+                orderedProducts =new OrderedProducts(); //by adding this last item was not dispalyed the total number of item times
+                orderedProducts.setproductID(cursor.getInt(cursor.getColumnIndex("ProductID")));
+                orderedProducts.setPrice(cursor.getInt(cursor.getColumnIndex("TotalPrice")));
+                orderedProducts.setqty(cursor.getInt(cursor.getColumnIndex("quantity")));
+                orderedProducts.setuserId(cursor.getInt(cursor.getColumnIndex("UserID")));
+                orderedProducts.setproductImg(getImage(orderedProducts.getproductID()));
+                orderedProducts.setOrderID(cursor.getInt(cursor.getColumnIndex("OrderID")));
+                int pid = orderedProducts.getproductID();
+                orderedProducts.setproductName(getProductName(pid));
+                cursor.moveToNext();
+                orderedProductList.add(orderedProducts);
+            }
+        }
+        cursor.close();
+        return orderedProductList;
+    }
+
 }

@@ -5,6 +5,7 @@ public class CartProducts {
     int userId;
     int qty;
     int price;
+    int CartID;
     private byte[] productImg;
     private String productName;
 
@@ -44,6 +45,13 @@ public class CartProducts {
     }
     public int getuserId(){
         return this.userId;
+    }
+
+    public void setCartId(int CartID){
+        this.CartID = CartID;
+    }
+    public int getCartId(){
+        return this.CartID;
     }
 
     public void setPrice(int price){
